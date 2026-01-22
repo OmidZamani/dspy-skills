@@ -195,3 +195,10 @@ optimizer = MIPROv2(
 - Requires substantial training data
 - Optimization time: hours for "heavy" preset
 - Memory intensive for large candidate sets
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **MIPROv2 API**: https://dspy.ai/api/optimizers/MIPROv2/
+- **Advanced Optimization**: https://dspy.ai/tutorials/advanced-optimization/

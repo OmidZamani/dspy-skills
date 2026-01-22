@@ -240,3 +240,10 @@ class MultiHopRAG(dspy.Module):
 - ColBERTv2 requires hosted index
 - Context length limits affect passage count
 - Latency increases with more passages
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **RAG Tutorial**: https://dspy.ai/tutorials/rag/
+- **Retrieval Guide**: https://dspy.ai/api/retrieval_models/

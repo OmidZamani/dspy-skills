@@ -270,3 +270,10 @@ class FormattedSignature(dspy.Signature):
 - Some LLMs struggle with strict type constraints
 - Field descriptions and constraints add to prompt length
 - Default values only work for InputField, not OutputField
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **Signatures API**: https://dspy.ai/api/signatures/
+- **Signatures Tutorial**: https://dspy.ai/tutorials/signatures/

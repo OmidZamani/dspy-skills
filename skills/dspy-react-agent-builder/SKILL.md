@@ -204,3 +204,10 @@ compiled.save("research_agent_optimized.json", save_program=False)
 - Agent may call tools unnecessarily or miss necessary calls
 - Requires GEPA optimization for production quality
 - Tool execution is sequential, not parallelized
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **ReAct Module**: https://dspy.ai/api/modules/ReAct/
+- **Agents Tutorial**: https://dspy.ai/tutorials/agents/

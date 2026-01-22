@@ -241,3 +241,10 @@ optimizer = dspy.SIMBA(
 - Not as thorough as GEPA for agent optimization
 - Mini-batch sampling adds variance to results
 - No automatic prompt reflection like GEPA
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **SIMBA Optimizer**: https://dspy.ai/api/optimizers/SIMBA/
+- **Optimization Comparison**: https://dspy.ai/tutorials/choosing-optimizer/

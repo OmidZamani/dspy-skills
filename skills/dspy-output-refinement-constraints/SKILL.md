@@ -231,3 +231,10 @@ refined = dspy.Refine(module=module, reward_fn=reward, N=3, threshold=1.0)
 - BestOfN is expensive (N × cost)
 - No automatic constraint learning (manual reward design)
 - Refine may not improve if base module is fundamentally wrong
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **Refine Module**: https://dspy.ai/api/modules/Refine/
+- **Constraints Guide**: https://dspy.ai/tutorials/constraints/

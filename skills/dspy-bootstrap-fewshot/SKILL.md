@@ -165,3 +165,10 @@ def optimize_with_bootstrap(trainset, devset):
 - Teacher model costs can add up
 - May not generalize to very different inputs
 - Limited exploration compared to MIPROv2
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **BootstrapFewShot API**: https://dspy.ai/api/optimizers/BootstrapFewShot/
+- **Optimization Guide**: https://dspy.ai/tutorials/optimization/

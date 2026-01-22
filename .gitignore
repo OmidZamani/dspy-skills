@@ -43,3 +43,4 @@ ENV/
 # DSPy compiled programs
 *.json
 !.claude-plugin/marketplace.json
+!.claude-plugin/plugin.json

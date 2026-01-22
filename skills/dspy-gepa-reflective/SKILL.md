@@ -207,3 +207,10 @@ optimizer = dspy.GEPA(
 - Expensive: uses strong LM for reflection
 - Newer optimizer, less battle-tested than MIPROv2
 - Best for instruction optimization, less for demos
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **GEPA Optimizer**: https://dspy.ai/api/optimizers/GEPA/
+- **Agents Guide**: https://dspy.ai/tutorials/agents/

@@ -269,3 +269,10 @@ class ProductionRAG(dspy.Module):
 - Module testing requires mocking LM calls
 - Deep module hierarchies can be hard to debug
 - Performance overhead from validation in hot paths
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **Custom Modules Guide**: https://dspy.ai/tutorials/custom-modules/
+- **Module API**: https://dspy.ai/api/modules/

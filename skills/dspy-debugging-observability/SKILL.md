@@ -249,3 +249,10 @@ dspy.configure(lm=dspy.LM("openai/gpt-4o-mini"), callbacks=[callback])
 - inspect_history() only stores recent calls (last 100 by default)
 - Custom callbacks don't capture internal optimizer steps
 - Cost estimation requires manual pricing table updates
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **Observability Guide**: https://dspy.ai/tutorials/observability/
+- **MLflow Integration**: https://dspy.ai/integrations/mlflow/

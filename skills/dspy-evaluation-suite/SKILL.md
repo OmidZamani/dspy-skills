@@ -276,3 +276,10 @@ results = suite.compare({
 - SemanticF1 requires LLM calls (cost)
 - Parallel evaluation can hit rate limits
 - Edge cases may not be captured
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **Evaluation API**: https://dspy.ai/api/evaluation/
+- **Metrics Guide**: https://dspy.ai/tutorials/metrics/

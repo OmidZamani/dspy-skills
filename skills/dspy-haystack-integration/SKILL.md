@@ -172,3 +172,10 @@ This class provides:
 - Some Haystack features don't map directly to DSPy
 - Requires maintaining two codebases initially
 - Complex pipelines may need custom integration
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **Integrations Guide**: https://dspy.ai/integrations/
+- **Haystack Documentation**: https://docs.haystack.deepset.ai/

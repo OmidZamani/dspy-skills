@@ -247,3 +247,10 @@ def finetune_rag_classifier(trainset, devset):
 - Student may not match teacher quality on all inputs
 - Fine-tuning takes hours/days depending on data size
 - Model size reduction may cause capability loss
+
+## Official Documentation
+
+- **DSPy Documentation**: https://dspy.ai/
+- **DSPy GitHub**: https://github.com/stanfordnlp/dspy
+- **BootstrapFinetune API**: https://dspy.ai/api/optimizers/BootstrapFinetune/
+- **Fine-tuning Guide**: https://dspy.ai/tutorials/finetuning/
