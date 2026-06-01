@@ -1,7 +1,7 @@
 ---
 name: dspy-finetune-bootstrap
 version: "1.0.0"
-dspy-compatibility: "3.1.2"
+dspy-compatibility: "3.2.1"
 description: This skill should be used when the user asks to "fine-tune a DSPy model", "distill a program into weights", "use BootstrapFinetune", "create a student model", "reduce inference costs with fine-tuning", mentions "model distillation", "teacher-student training", or wants to deploy a DSPy program as fine-tuned weights for production efficiency.
 allowed-tools:
   - Read
@@ -57,16 +57,13 @@ class TeacherQA(dspy.Module):
         return self.cot(question=question)
 ```
 
-### Phase 2: Enable Experimental Features & Generate Training Traces
+### Phase 2: Configure Fine-Tuning
 
-BootstrapFinetune is experimental and requires enabling the flag:
+Assign the LM directly to predictors before fine-tuning:
 
 ```python
 import dspy
 from dspy.teleprompt import BootstrapFinetune
-
-# Enable experimental features
-dspy.settings.experimental = True
 
 optimizer = BootstrapFinetune(
     metric=lambda gold, pred, trace=None: gold.answer.lower() in pred.answer.lower(),
@@ -82,10 +79,9 @@ optimizer = BootstrapFinetune(
 ### Phase 3: Fine-tune Student Model
 
 ```python
-finetuned = optimizer.compile(
-    TeacherQA(),
-    trainset=trainset
-)
+teacher = TeacherQA()
+teacher.set_lm(dspy.settings.lm)
+finetuned = optimizer.compile(teacher, trainset=trainset)
 ```
 
 ### Phase 4: Deploy
@@ -108,9 +104,6 @@ from dspy.teleprompt import BootstrapFinetune
 from dspy.evaluate import Evaluate
 import logging
 import os
-
-# Enable experimental features
-dspy.settings.experimental = True
 
 logger = logging.getLogger(__name__)
 
@@ -139,6 +132,7 @@ def finetune_classifier(trainset, devset, output_dir="./finetuned_model"):
     dspy.configure(lm=dspy.LM("openai/gpt-4o"))
     
     teacher = TextClassifier()
+    teacher.set_lm(dspy.settings.lm)
     
     # Evaluate teacher
     evaluator = Evaluate(devset=devset, metric=classification_metric, num_threads=8)
@@ -202,6 +196,7 @@ def finetune_rag_classifier(trainset, devset):
     )
 
     rag = RAGClassifier()
+    rag.set_lm(dspy.settings.lm)
 
     # Fine-tune (train_kwargs in constructor)
     optimizer = BootstrapFinetune(
@@ -242,7 +237,7 @@ def finetune_rag_classifier(trainset, devset):
 
 ## Limitations
 
-- Requires access to model weights (not API-only models)
+- Requires a provider and model that support fine-tuning
 - Training requires GPU resources
 - Student may not match teacher quality on all inputs
 - Fine-tuning takes hours/days depending on data size

@@ -1,7 +1,7 @@
 ---
 name: dspy-evaluation-suite
 version: "1.0.0"
-dspy-compatibility: "3.1.2"
+dspy-compatibility: "3.2.1"
 description: This skill should be used when the user asks to "evaluate a DSPy program", "test my DSPy module", "measure performance", "create evaluation metrics", "use answer_exact_match or SemanticF1", mentions "Evaluate class", "comparing programs", "establishing baselines", or needs to systematically test and measure DSPy program quality with custom or built-in metrics.
 allowed-tools:
   - Read
@@ -126,14 +126,17 @@ def quality_metric(example, pred, trace=None):
 ### GEPA-Compatible Metric
 
 ```python
-def feedback_metric(example, pred, trace=None):
-    """Returns (score, feedback) for GEPA optimizer."""
+def feedback_metric(example, pred, trace=None, pred_name=None, pred_trace=None):
+    """Return a GEPA-compatible score and textual feedback."""
     correct = example.answer.lower() in pred.answer.lower()
     
     if correct:
-        return 1.0, "Correct answer provided."
+        return dspy.Prediction(score=1.0, feedback="Correct answer provided.")
     else:
-        return 0.0, f"Expected '{example.answer}', got '{pred.answer}'"
+        return dspy.Prediction(
+            score=0.0,
+            feedback=f"Expected '{example.answer}', got '{pred.answer}'"
+        )
 ```
 
 ## Production Example

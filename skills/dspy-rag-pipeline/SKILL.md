@@ -1,7 +1,7 @@
 ---
 name: dspy-rag-pipeline
 version: "1.0.0"
-dspy-compatibility: "3.1.2"
+dspy-compatibility: "3.2.1"
 description: This skill should be used when the user asks to "build a RAG pipeline", "create retrieval augmented generation", "use ColBERTv2 in DSPy", "set up a retriever in DSPy", mentions "RAG with DSPy", "context retrieval", "multi-hop RAG", or needs to build a DSPy system that retrieves external knowledge to answer questions with grounded, factual responses.
 allowed-tools:
   - Read
@@ -26,6 +26,7 @@ Build retrieval-augmented generation pipelines with ColBERTv2 that can be system
 ## Related Skills
 
 - Optimize this pipeline: [dspy-miprov2-optimizer](../dspy-miprov2-optimizer/SKILL.md), [dspy-bootstrap-fewshot](../dspy-bootstrap-fewshot/SKILL.md)
+- Build local semantic retrieval: [dspy-embedding-retrieval](../dspy-embedding-retrieval/SKILL.md)
 - Evaluate results: [dspy-evaluation-suite](../dspy-evaluation-suite/SKILL.md)
 - Design signatures: [dspy-signature-designer](../dspy-signature-designer/SKILL.md)
 
@@ -64,7 +65,7 @@ dspy.configure(
 ```python
 class GenerateAnswer(dspy.Signature):
     """Answer questions with short factoid answers."""
-    context: str = dspy.InputField(desc="May contain relevant facts")
+    context: list[str] = dspy.InputField(desc="May contain relevant facts")
     question: str = dspy.InputField()
     answer: str = dspy.OutputField(desc="Often between 1 and 5 words")
 ```

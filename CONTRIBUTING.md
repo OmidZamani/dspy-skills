@@ -24,9 +24,10 @@ Open an issue with:
 2. Create a feature branch: `git checkout -b feature/my-improvement`
 3. Make your changes
 4. Test that examples run correctly
-5. Commit with clear messages
-6. Push to your fork
-7. Open a Pull Request
+5. Run `python3 scripts/validate_repo.py`
+6. Commit with clear messages
+7. Push to your fork
+8. Open a Pull Request
 
 ### Skill Guidelines
 
@@ -51,6 +52,7 @@ description: This skill should be used when the user asks to "[trigger]", "[trig
 - Add type hints
 - Use realistic examples
 - Follow DSPy best practices
+- Target the stable DSPy `3.2.x` series unless a skill is explicitly marked as prerelease-only
 
 **Skill Word Count:**
 - Target: 400-650 words

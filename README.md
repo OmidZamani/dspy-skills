@@ -1,129 +1,108 @@
 # DSPy Skills Collection
 
-A comprehensive collection of AI-powered skills for programming and optimizing LLM applications using the **DSPy** framework. These skills enable you to move from manual prompt engineering to systematic, programmatic LLM development.
+A Claude Code plugin containing 22 focused skills for programming, optimizing, evaluating, and deploying LLM applications with [DSPy](https://dspy.ai/).
 
-**Version Compatibility**: All skills target **DSPy 3.1.2** (released January 19, 2026). All code examples and APIs have been verified against this version.
+**Stable DSPy baseline:** `3.2.1`, released May 5, 2026. Install the stable series with:
 
-## 🎯 What is DSPy?
+```bash
+pip install -U "dspy>=3.2.1,<3.3"
+```
 
-DSPy is a declarative framework that lets you *program* language models instead of *prompting* them. It provides:
-- **Modular architecture** - Compose LLM programs from reusable components
-- **Automatic optimization** - Tune prompts, examples, and weights algorithmically
-- **Self-improving pipelines** - Systems that get better with data
+DSPy `3.3.0b1` is a prerelease published May 28, 2026. See [prerelease notes](docs/dspy-prerelease-3.3.md) before opting in.
 
-## 📚 Skills Index
+## Skills Index
+
+### Start Here
+
+| Skill | Use it for |
+|-------|------------|
+| [dspy-signature-designer](skills/dspy-signature-designer/SKILL.md) | Typed signatures and structured outputs |
+| [dspy-custom-module-design](skills/dspy-custom-module-design/SKILL.md) | Reusable `dspy.Module` architecture |
+| [dspy-evaluation-suite](skills/dspy-evaluation-suite/SKILL.md) | Metrics, baselines, and comparisons |
+| [dspy-optimizer-selection](skills/dspy-optimizer-selection/SKILL.md) | Choosing among DSPy's optimizer families |
+
+### Retrieval and Data
+
+| Skill | Use it for |
+|-------|------------|
+| [dspy-rag-pipeline](skills/dspy-rag-pipeline/SKILL.md) | RAG and multi-hop retrieval pipelines |
+| [dspy-embedding-retrieval](skills/dspy-embedding-retrieval/SKILL.md) | `Embedder`, `Embeddings`, FAISS, and local corpora |
+| [dspy-haystack-integration](skills/dspy-haystack-integration/SKILL.md) | Optimizing Haystack-backed pipelines |
+
+### Agents and Reasoning
+
+| Skill | Use it for |
+|-------|------------|
+| [dspy-react-agent-builder](skills/dspy-react-agent-builder/SKILL.md) | ReAct tool agents |
+| [dspy-mcp-tool-integration](skills/dspy-mcp-tool-integration/SKILL.md) | MCP tools in DSPy agents |
+| [dspy-reasoning-modules](skills/dspy-reasoning-modules/SKILL.md) | `RLM`, `ProgramOfThought`, `CodeAct`, and `Parallel` |
+| [dspy-advanced-module-composition](skills/dspy-advanced-module-composition/SKILL.md) | Ensembles and composed modules |
 
 ### Optimizers
-| Skill | Description | Best For |
-|-------|-------------|----------|
-| [dspy-bootstrap-fewshot](skills/dspy-bootstrap-fewshot/SKILL.md) | Auto-generate few-shot examples | Quick optimization with ~10 examples |
-| [dspy-miprov2-optimizer](skills/dspy-miprov2-optimizer/SKILL.md) | Bayesian instruction+demo optimization | 200+ examples, comprehensive tuning |
-| [dspy-gepa-reflective](skills/dspy-gepa-reflective/SKILL.md) | LLM reflection on execution traces | Agentic systems, complex workflows |
-| [dspy-simba-optimizer](skills/dspy-simba-optimizer/SKILL.md) | Mini-batch Bayesian optimization | Custom feedback, budget-friendly |
-| [dspy-optimize-anything](skills/dspy-optimize-anything/SKILL.md) | Universal text artifact optimizer (code, configs, SVGs, etc.) | Beyond prompts: any measurable text artifact |
-| [dspy-finetune-bootstrap](skills/dspy-finetune-bootstrap/SKILL.md) | Fine-tune model weights | Production deployment, efficiency |
 
-### Pipelines & Components
-| Skill | Description | Best For |
-|-------|-------------|----------|
-| [dspy-rag-pipeline](skills/dspy-rag-pipeline/SKILL.md) | RAG with ColBERTv2 retrieval | Knowledge-grounded generation |
-| [dspy-signature-designer](skills/dspy-signature-designer/SKILL.md) | Design type-safe I/O specs | Clean, validated outputs |
-| [dspy-evaluation-suite](skills/dspy-evaluation-suite/SKILL.md) | Metrics and evaluation | Quality assessment |
-| [dspy-haystack-integration](skills/dspy-haystack-integration/SKILL.md) | DSPy + Haystack pipelines | Existing Haystack projects |
+| Skill | Use it for |
+|-------|------------|
+| [dspy-bootstrap-fewshot](skills/dspy-bootstrap-fewshot/SKILL.md) | Fast demo bootstrapping |
+| [dspy-miprov2-optimizer](skills/dspy-miprov2-optimizer/SKILL.md) | Instruction and demo search |
+| [dspy-gepa-reflective](skills/dspy-gepa-reflective/SKILL.md) | Reflective instruction optimization |
+| [dspy-simba-optimizer](skills/dspy-simba-optimizer/SKILL.md) | Mini-batch introspective optimization |
+| [dspy-finetune-bootstrap](skills/dspy-finetune-bootstrap/SKILL.md) | Weight optimization and distillation |
+| [dspy-better-together](skills/dspy-better-together/SKILL.md) | Sequencing prompt and weight optimizers |
+| [dspy-optimize-anything](skills/dspy-optimize-anything/SKILL.md) | GEPA optimization for text artifacts outside DSPy |
 
-### Agent Development
-| Skill | Description | Best For |
-|-------|-------------|----------|
-| [dspy-react-agent-builder](skills/dspy-react-agent-builder/SKILL.md) | Build ReAct agents with tools | Multi-step reasoning tasks |
+### Production and Interfaces
 
-### Output Validation
-| Skill | Description | Best For |
-|-------|-------------|----------|
-| [dspy-output-refinement-constraints](skills/dspy-output-refinement-constraints/SKILL.md) | Refine outputs with constraints | Format/content validation |
+| Skill | Use it for |
+|-------|------------|
+| [dspy-output-refinement-constraints](skills/dspy-output-refinement-constraints/SKILL.md) | `Refine` and `BestOfN` constraints |
+| [dspy-adapters-multimodal](skills/dspy-adapters-multimodal/SKILL.md) | Adapters, native tools, image, audio, and file inputs |
+| [dspy-production-deployment](skills/dspy-production-deployment/SKILL.md) | Cache hardening, save/load, usage tracking, async, and streaming |
+| [dspy-debugging-observability](skills/dspy-debugging-observability/SKILL.md) | Inspection, callbacks, and MLflow tracing |
 
-### Advanced Patterns
-| Skill | Description | Best For |
-|-------|-------------|----------|
-| [dspy-advanced-module-composition](skills/dspy-advanced-module-composition/SKILL.md) | Ensemble and multi-chain patterns | Complex multi-module programs |
-| [dspy-custom-module-design](skills/dspy-custom-module-design/SKILL.md) | Build custom DSPy modules | Reusable production components |
+## Typical Workflow
 
-### Debugging & Monitoring
-| Skill | Description | Best For |
-|-------|-------------|----------|
-| [dspy-debugging-observability](skills/dspy-debugging-observability/SKILL.md) | MLflow tracing and monitoring | Production debugging, cost tracking |
+1. Define typed inputs and outputs with [dspy-signature-designer](skills/dspy-signature-designer/SKILL.md).
+2. Build a module, RAG pipeline, or agent.
+3. Establish a baseline with [dspy-evaluation-suite](skills/dspy-evaluation-suite/SKILL.md).
+4. Choose an optimizer with [dspy-optimizer-selection](skills/dspy-optimizer-selection/SKILL.md).
+5. Harden the runtime with [dspy-production-deployment](skills/dspy-production-deployment/SKILL.md).
 
-## 🎯 Choosing the Right Optimizer
-
-| Your Situation | Recommended Skill | Why |
-|----------------|-------------------|-----|
-| 10-50 labeled examples | [dspy-bootstrap-fewshot](skills/dspy-bootstrap-fewshot/SKILL.md) | Fast, cost-effective |
-| 200+ examples, need best performance | [dspy-miprov2-optimizer](skills/dspy-miprov2-optimizer/SKILL.md) | State-of-the-art results |
-| Building agents with tools | [dspy-gepa-reflective](skills/dspy-gepa-reflective/SKILL.md) | Optimizes execution traces |
-| Production deployment, cost reduction | [dspy-finetune-bootstrap](skills/dspy-finetune-bootstrap/SKILL.md) | Creates efficient fine-tuned models |
-
-## 🔄 Typical Workflow
-
-1. **Design** → [Signature Designer](skills/dspy-signature-designer/SKILL.md) - Define inputs/outputs
-2. **Build** → [RAG Pipeline](skills/dspy-rag-pipeline/SKILL.md) or [Agent Builder](skills/dspy-react-agent-builder/SKILL.md) - Create your DSPy program
-3. **Validate** → [Output Refinement](skills/dspy-output-refinement-constraints/SKILL.md) - Add constraints
-4. **Optimize** → Choose optimizer based on your data
-5. **Evaluate** → [Evaluation Suite](skills/dspy-evaluation-suite/SKILL.md) - Measure improvements
-6. **Debug** → [Debugging & Observability](skills/dspy-debugging-observability/SKILL.md) - Monitor performance
-7. **Deploy** → [Fine-tune Bootstrap](skills/dspy-finetune-bootstrap/SKILL.md) - Optional production optimization
-
-## 📖 Documentation
-
-- [DSPy Framework Guide](docs/dspy-framework.md) - Complete framework reference
-
-## 🚀 Installation
+## Optional Dependencies
 
 ```bash
-# Install DSPy 3.1.2 or later
-pip install dspy-ai>=3.1.2
+# Bayesian search for MIPROv2
+pip install -U "dspy[optuna]>=3.2.1,<3.3"
+
+# MCP tool integration
+pip install -U "dspy[mcp]>=3.2.1,<3.3"
+
+# Large local embedding corpora
+pip install faiss-cpu
+
+# optimize_anything
+pip install -U "gepa>=0.1.1,<0.2"
 ```
 
-### Optional Dependencies
+## Install as a Claude Code Plugin
+
+```text
+/plugin marketplace add OmidZamani/dspy-skills
+/plugin install dspy-skills@dspy-skills-marketplace
+```
+
+## Documentation
+
+- [DSPy framework guide](docs/dspy-framework.md)
+- [DSPy official documentation](https://dspy.ai/)
+- [DSPy releases](https://github.com/stanfordnlp/dspy/releases)
+
+## Validate Changes
 
 ```bash
-# For ColBERTv2 retrieval
-pip install colbert-ai
-
-# For Haystack integration
-pip install haystack-ai
-
-# For fine-tuning
-pip install transformers datasets
-
-# For optimize_anything (universal text optimizer)
-pip install gepa
+python3 scripts/validate_repo.py
+python3 -m compileall -q examples skills/dspy-haystack-integration/examples
 ```
 
-## 💡 Quick Start
+## License
 
-```python
-import dspy
-
-# Configure LM
-dspy.configure(lm=dspy.LM("openai/gpt-4o-mini"))
-
-# Create a simple classifier
-classify = dspy.Predict("text -> sentiment: bool")
-result = classify(text="I love this product!")
-print(result.sentiment)  # True
-```
-
-## 📁 Examples
-
-See [examples/code-snippets.py](examples/code-snippets.py) for production-ready code.
-
-## 🤝 Contributing
-
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## 📜 License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-## 🙏 Acknowledgments
-
-Built for the [SkillsMP marketplace](https://github.com/skills-mp). Uses the [DSPy framework](https://dspy.ai/) by Stanford NLP.
+MIT License. See [LICENSE](LICENSE).

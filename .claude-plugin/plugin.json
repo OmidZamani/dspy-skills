@@ -1,7 +1,7 @@
 {
   "name": "dspy-skills",
-  "version": "1.0.0",
-  "description": "Collection of skills for DSPy framework - program language models, optimize prompts, and build RAG pipelines systematically.",
+  "version": "2.0.0",
+  "description": "Collection of 22 focused skills for building, optimizing, evaluating, and deploying DSPy applications.",
   "author": {
     "name": "OmidZamani",
     "url": "https://github.com/OmidZamani"
@@ -20,6 +20,10 @@
     "bayesian-optimization",
     "react-agents",
     "evaluation",
-    "fine-tuning"
+    "fine-tuning",
+    "rlm",
+    "mcp",
+    "streaming",
+    "multimodal"
   ]
 }

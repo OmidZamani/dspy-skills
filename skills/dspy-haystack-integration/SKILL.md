@@ -1,7 +1,7 @@
 ---
 name: dspy-haystack-integration
 version: "1.0.0"
-dspy-compatibility: "3.1.2"
+dspy-compatibility: "3.2.1"
 description: This skill should be used when the user asks to "integrate DSPy with Haystack", "optimize Haystack prompts using DSPy", "use DSPy to improve Haystack pipeline", mentions "Haystack pipeline optimization", "combining DSPy and Haystack", "extract DSPy prompt for Haystack", or wants to use DSPy's optimization capabilities to automatically improve prompts in existing Haystack pipelines.
 allowed-tools:
   - Read

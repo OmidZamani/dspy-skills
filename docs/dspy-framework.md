@@ -2,6 +2,8 @@
 
 Comprehensive reference for the DSPy framework - a declarative system for programming and optimizing LLM applications.
 
+**Stable baseline:** DSPy `3.2.1`. See [DSPy 3.3 prerelease notes](dspy-prerelease-3.3.md) before opting into beta releases.
+
 ## Table of Contents
 - [Core Concepts](#core-concepts)
 - [Signatures](#signatures)
@@ -10,6 +12,7 @@ Comprehensive reference for the DSPy framework - a declarative system for progra
 - [Optimizers](#optimizers)
 - [Retrieval & RAG](#retrieval--rag)
 - [Evaluation](#evaluation)
+- [Production Runtime](#production-runtime)
 
 ---
 
@@ -107,11 +110,28 @@ def search_wiki(query: str) -> str:
 
 def calculate(expression: str) -> float:
     """Evaluate a math expression."""
-    return dspy.PythonInterpreter({}).execute(expression)
+    with dspy.PythonInterpreter() as interpreter:
+        return interpreter.execute(expression)
 
 agent = dspy.ReAct("question -> answer: float", tools=[search_wiki, calculate])
 result = agent(question="What is 100 divided by the year Columbus discovered America?")
 ```
+
+### dspy.RLM
+
+Explore very large contexts through a sandboxed Python REPL and recursive sub-LM calls:
+
+```python
+rlm = dspy.RLM(
+    "document, question -> answer",
+    max_iterations=12,
+    max_llm_calls=30,
+    sub_lm=dspy.LM("openai/gpt-4o-mini"),
+)
+result = rlm(document=very_long_document, question="What are the key findings?")
+```
+
+`RLM`, `ProgramOfThought`, and `CodeAct` use `dspy.PythonInterpreter` by default and require Deno. Treat `RLM` as experimental and keep sandbox permissions narrow.
 
 ---
 
@@ -137,6 +157,38 @@ dspy.configure(
     lm=dspy.LM("openai/gpt-4o-mini"),
     adapter=dspy.JSONAdapter()
 )
+```
+
+### dspy.XMLAdapter
+
+Use XML tags when they are easier for the selected LM to follow:
+
+```python
+dspy.configure(
+    lm=dspy.LM("openai/gpt-4o-mini"),
+    adapter=dspy.XMLAdapter(),
+)
+```
+
+### Native Function Calling
+
+`JSONAdapter` enables native function calling by default. `ChatAdapter` keeps text parsing by default. DSPy falls back to manual parsing when the LM does not support native tool calling.
+
+```python
+dspy.ChatAdapter(use_native_function_calling=True)
+dspy.JSONAdapter(use_native_function_calling=False)
+```
+
+### Multimodal Inputs
+
+Use typed signature inputs such as `dspy.Image`, `dspy.Audio`, and `dspy.File`:
+
+```python
+class SummarizeFile(dspy.Signature):
+    file: dspy.File = dspy.InputField()
+    summary: str = dspy.OutputField()
+
+result = dspy.Predict(SummarizeFile)(file=dspy.File.from_path("./report.pdf"))
 ```
 
 ---
@@ -287,11 +339,11 @@ Newest optimizer: LLM reflection on full execution traces.
 ```python
 import dspy
 
-# GEPA requires a feedback metric
-def gepa_metric(example, pred, trace=None):
+# GEPA requires a five-argument feedback metric
+def gepa_metric(example, pred, trace=None, pred_name=None, pred_trace=None):
     is_correct = example.answer.lower() in pred.answer.lower()
     feedback = "Correct answer" if is_correct else f"Expected {example.answer}, got {pred.answer}"
-    return is_correct, feedback
+    return dspy.Prediction(score=float(is_correct), feedback=feedback)
 
 optimizer = dspy.GEPA(
     metric=gepa_metric,
@@ -302,10 +354,9 @@ optimizer = dspy.GEPA(
 
 | Parameter | Description | Default |
 |-----------|-------------|--------|
-| `metric` | Must return (score, feedback) | Required |
+| `metric` | Accept five arguments; return `dspy.Prediction(score=..., feedback=...)` for textual feedback | Required |
 | `reflection_lm` | Strong LM for reflection | Default LM |
 | `auto` | "light", "medium", "heavy" | None |
-| `enable_tool_optimization` | Optimize tool descriptions | False |
 
 **Best for:** Complex agentic systems, when you have rich textual feedback.
 
@@ -319,13 +370,11 @@ Distill a DSPy program into fine-tuned weights.
 import dspy
 
 optimizer = dspy.BootstrapFinetune(
-    metric=lambda gold, pred, trace=None: gold.label == pred.label
+    metric=lambda gold, pred, trace=None: gold.label == pred.label,
+    train_kwargs={'learning_rate': 5e-5, 'num_train_epochs': 3},
 )
-finetuned = optimizer.compile(
-    program,
-    trainset=trainset,
-    train_kwargs={'learning_rate': 5e-5, 'num_train_epochs': 3}
-)
+program.set_lm(dspy.settings.lm)
+finetuned = optimizer.compile(program, trainset=trainset)
 ```
 
 | Parameter | Description |
@@ -343,6 +392,20 @@ from dspy.teleprompt import Ensemble
 ensembled = Ensemble(reduce_fn=dspy.majority).compile([prog1, prog2, prog3])
 ```
 
+### BetterTogether Meta-Optimizer
+
+Sequence arbitrary optimizers and return the best validated candidate:
+
+```python
+student.set_lm(lm)
+optimizer = dspy.BetterTogether(
+    metric=metric,
+    p=dspy.GEPA(metric=gepa_metric, reflection_lm=reflection_lm, auto="light"),
+    w=dspy.BootstrapFinetune(metric=metric),
+)
+compiled = optimizer.compile(student, trainset=trainset, valset=valset, strategy="p -> w -> p")
+```
+
 ---
 
 ## Retrieval & RAG
@@ -355,6 +418,18 @@ import dspy
 colbert = dspy.ColBERTv2(url='http://20.102.90.50:2017/wiki17_abstracts')
 dspy.configure(lm=dspy.LM("openai/gpt-4o-mini"), rm=colbert)
 ```
+
+### Local Embedding Retrieval
+
+Use `dspy.Embedder` and `dspy.Embeddings` for an application-owned text corpus:
+
+```python
+embedder = dspy.Embedder("openai/text-embedding-3-small")
+search = dspy.Embeddings(corpus=corpus, embedder=embedder, k=5)
+context = search("Which documents discuss deployment?").passages
+```
+
+For large corpora, install `faiss-cpu`. Persist expensive indexes with `search.save(path)` and reload them with `dspy.Embeddings.from_saved(path, embedder)`.
 
 ### RAG Module Pattern
 
@@ -423,6 +498,47 @@ def my_metric(example, pred, trace=None):
     """Returns bool, int, or float."""
     return example.answer.lower() == pred.answer.lower()
 ```
+
+---
+
+## Production Runtime
+
+### Cache Hardening
+
+```python
+dspy.configure_cache(restrict_pickle=True)
+```
+
+Use `safe_types=[...]` only for trusted application types that must be read from the disk cache.
+
+### State-Only JSON Save
+
+```python
+compiled.save("./artifacts/program.json", save_program=False)
+loaded = MyProgram()
+loaded.load("./artifacts/program.json")
+```
+
+Whole-program save uses cloudpickle. Load whole programs only from trusted sources.
+
+### Usage Tracking
+
+```python
+dspy.configure(lm=lm, track_usage=True)
+prediction = program(question="What is DSPy?")
+print(prediction.get_lm_usage())
+```
+
+### Async and Streaming
+
+Use `await program.acall(...)` for native async execution. Wrap output-token streaming with `dspy.streamify` and `dspy.streaming.StreamListener`.
+
+### Further Reading
+
+- [Production deployment skill](../skills/dspy-production-deployment/SKILL.md)
+- [Adapters and multimodal skill](../skills/dspy-adapters-multimodal/SKILL.md)
+- [Reasoning modules skill](../skills/dspy-reasoning-modules/SKILL.md)
+- [MCP tool integration skill](../skills/dspy-mcp-tool-integration/SKILL.md)
 
 ---
 

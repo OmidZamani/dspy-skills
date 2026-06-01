@@ -1,7 +1,7 @@
 ---
 name: dspy-react-agent-builder
 version: "1.0.0"
-dspy-compatibility: "3.1.2"
+dspy-compatibility: "3.2.1"
 description: This skill should be used when the user asks to "create a ReAct agent", "build an agent with tools", "implement tool-calling agent", "use dspy.ReAct", mentions "agent with tools", "reasoning and acting", "multi-step agent", "agent optimization with GEPA", or needs to build production agents that use tools to solve complex tasks.
 allowed-tools:
   - Read
@@ -26,6 +26,8 @@ Build production-quality ReAct agents that use tools to solve complex multi-step
 ## Related Skills
 
 - Optimize agents: [dspy-gepa-reflective](../dspy-gepa-reflective/SKILL.md)
+- Connect MCP tools: [dspy-mcp-tool-integration](../dspy-mcp-tool-integration/SKILL.md)
+- Configure native tool calling: [dspy-adapters-multimodal](../dspy-adapters-multimodal/SKILL.md)
 - Define signatures: [dspy-signature-designer](../dspy-signature-designer/SKILL.md)
 - Evaluate performance: [dspy-evaluation-suite](../dspy-evaluation-suite/SKILL.md)
 
@@ -75,8 +77,8 @@ def calculate(expression: str) -> float:
         Numerical result
     """
     try:
-        interpreter = dspy.PythonInterpreter()
-        return interpreter.execute(expression)
+        with dspy.PythonInterpreter() as interpreter:
+            return interpreter.execute(expression)
     except Exception as e:
         return f"Error: {e}"
 ```
@@ -133,9 +135,8 @@ class ResearchAgent(dspy.Module):
     def calculate(self, expression: str) -> str:
         """Evaluate mathematical expressions safely."""
         try:
-            interpreter = dspy.PythonInterpreter()
-            result = interpreter.execute(expression)
-            return str(result)
+            with dspy.PythonInterpreter() as interpreter:
+                return str(interpreter.execute(expression))
         except Exception as e:
             logger.error(f"Calculation failed: {e}")
             return f"Error: {e}"
@@ -181,8 +182,7 @@ def feedback_metric(example, pred, trace=None, pred_name=None, pred_trace=None):
 optimizer = dspy.GEPA(
     metric=feedback_metric,
     reflection_lm=dspy.LM("openai/gpt-4o"),
-    auto="medium",
-    enable_tool_optimization=True  # Also optimize tool docstrings
+    auto="medium"
 )
 
 compiled = optimizer.compile(agent, trainset=trainset)
@@ -202,7 +202,7 @@ compiled.save("research_agent_optimized.json", save_program=False)
 - ReAct works best with 3-7 tools; too many tools confuse the agent
 - Not all LMs support tool calling equally well (GPT-4 > GPT-3.5)
 - Agent may call tools unnecessarily or miss necessary calls
-- Requires GEPA optimization for production quality
+- GEPA can improve production quality when a representative trainset and feedback metric are available
 - Tool execution is sequential, not parallelized
 
 ## Official Documentation

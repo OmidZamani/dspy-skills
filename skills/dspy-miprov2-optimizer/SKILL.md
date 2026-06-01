@@ -1,7 +1,7 @@
 ---
 name: dspy-miprov2-optimizer
 version: "1.0.0"
-dspy-compatibility: "3.1.2"
+dspy-compatibility: "3.2.1"
 description: This skill should be used when the user asks to "optimize a DSPy program", "use MIPROv2", "tune instructions and demos", "get best DSPy performance", "run Bayesian optimization", mentions "state-of-the-art DSPy optimizer", "joint instruction tuning", or needs maximum performance from a DSPy program with substantial training data (200+ examples).
 allowed-tools:
   - Read
@@ -46,6 +46,12 @@ Jointly optimize instructions and few-shot demonstrations using Bayesian Optimiz
 | `compiled_program` | `dspy.Module` | Fully optimized program |
 
 ## Workflow
+
+Install the optional Optuna dependency before using MIPROv2:
+
+```bash
+pip install -U "dspy[optuna]>=3.2.1,<3.3"
+```
 
 ### Three-Stage Process
 

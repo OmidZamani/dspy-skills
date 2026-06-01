@@ -1,7 +1,7 @@
 ---
 name: dspy-debugging-observability
 version: "1.0.0"
-dspy-compatibility: "3.1.2"
+dspy-compatibility: "3.2.1"
 description: This skill should be used when the user asks to "debug DSPy programs", "trace LLM calls", "monitor production DSPy", "use MLflow with DSPy", mentions "inspect_history", "custom callbacks", "observability", "production monitoring", "cost tracking", or needs to debug, trace, and monitor DSPy applications in development and production.
 allowed-tools:
   - Read

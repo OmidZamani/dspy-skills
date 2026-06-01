@@ -1,7 +1,7 @@
 ---
 name: dspy-advanced-module-composition
 version: "1.0.0"
-dspy-compatibility: "3.1.2"
+dspy-compatibility: "3.2.1"
 description: This skill should be used when the user asks to "compose DSPy modules", "use Ensemble optimizer", "combine multiple programs", "use dspy.MultiChainComparison", mentions "ensemble voting", "module composition", "sequential pipelines", or needs to build complex multi-module DSPy programs with ensemble patterns or multi-chain comparison.
 allowed-tools:
   - Read

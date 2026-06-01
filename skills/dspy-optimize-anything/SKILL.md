@@ -1,5 +1,7 @@
 ---
 name: dspy-optimize-anything
+version: "1.1.0"
+gepa-compatibility: "0.1.1"
 description: Universal text artifact optimizer using GEPA's optimize_anything API for code, prompts, agent architectures, configs, and more
 allowed-tools:
   - Read
@@ -45,7 +47,7 @@ Optimize any artifact representable as text — code, prompts, agent architectur
 ### Phase 1: Install
 
 ```bash
-pip install gepa
+pip install -U "gepa>=0.1.1,<0.2"
 ```
 
 ### Phase 2: Define Evaluator with ASI
@@ -56,6 +58,9 @@ The evaluator scores a candidate and returns Actionable Side Information (ASI) �
 
 ```python
 import gepa.optimize_anything as oa
+from gepa.optimize_anything import EngineConfig, GEPAConfig
+
+config = GEPAConfig(engine=EngineConfig(max_metric_calls=100))
 
 def evaluate(candidate: str) -> float:
     score, diagnostic = run_my_system(candidate)
@@ -85,6 +90,7 @@ ASI can include open-ended text, structured data, multi-objectives (via `scores`
 result = oa.optimize_anything(
     seed_candidate="<your initial artifact>",
     evaluator=evaluate,
+    config=config,
 )
 ```
 
@@ -95,6 +101,7 @@ result = oa.optimize_anything(
     seed_candidate="<your initial artifact>",
     evaluator=evaluate,
     dataset=tasks,
+    config=config,
 )
 ```
 
@@ -106,6 +113,7 @@ result = oa.optimize_anything(
     evaluator=evaluate,
     dataset=train,
     valset=val,
+    config=config,
 )
 ```
 
@@ -115,6 +123,7 @@ result = oa.optimize_anything(
 result = oa.optimize_anything(
     evaluator=evaluate,
     objective="Generate a Python function `reverse()` that reverses a string.",
+    config=config,
 )
 ```
 
@@ -129,6 +138,7 @@ print(result.best_candidate)
 ```python
 import gepa.optimize_anything as oa
 from gepa import Image
+from gepa.optimize_anything import EngineConfig, GEPAConfig
 import logging
 
 logger = logging.getLogger(__name__)
@@ -161,6 +171,7 @@ result = oa.optimize_anything(
     dataset=VISUAL_ASPECTS,
     background=f"Optimize SVG source code depicting '{GOAL}'. "
                "Improve anatomy, composition, and visual quality.",
+    config=GEPAConfig(engine=EngineConfig(max_metric_calls=100)),
 )
 
 logger.info(f"Best SVG:\n{result.best_candidate['svg_code']}")
@@ -197,6 +208,7 @@ result = oa.optimize_anything(
               "minimizes the number of bins. Output JSON with 'score' and 'solution'.",
     background="Use first-fit-decreasing as a starting heuristic. "
                "Higher score = fewer bins used.",
+    config=GEPAConfig(engine=EngineConfig(max_metric_calls=100)),
 )
 
 print(result.best_candidate)
@@ -231,6 +243,7 @@ result = oa.optimize_anything(
     valset=val_tasks,
     background="Discover a Python agent function `solve(input)` that "
                "generalizes across unseen reasoning tasks.",
+    config=GEPAConfig(engine=EngineConfig(max_metric_calls=100)),
 )
 
 print(result.best_candidate)
@@ -243,6 +256,7 @@ print(result.best_candidate)
 ```python
 import dspy
 import gepa.optimize_anything as oa
+from gepa.optimize_anything import EngineConfig, GEPAConfig
 
 # DSPy program optimization (use dspy.GEPA)
 optimizer = dspy.GEPA(
@@ -257,6 +271,7 @@ result = oa.optimize_anything(
     seed_candidate=my_config_yaml,
     evaluator=eval_config,
     background="Optimize Kubernetes scheduling policy for cost.",
+    config=GEPAConfig(engine=EngineConfig(max_metric_calls=100)),
 )
 ```
 
@@ -269,11 +284,18 @@ result = oa.optimize_anything(
 5. **Background context** — Provide domain knowledge via `background=` to constrain the search
 6. **Generalization mode** — Always provide `valset` when the artifact must transfer to unseen inputs
 7. **Images as ASI** — Use `gepa.Image` to pass rendered outputs to vision-capable LLMs
+8. **Bound every run** — Set `GEPAConfig(engine=EngineConfig(max_metric_calls=...))`
 
 ## Limitations
 
-- Requires the `gepa` package (`pip install gepa`)
+- Requires the `gepa` package (`pip install -U "gepa>=0.1.1,<0.2"`)
 - Evaluator must be deterministic or low-variance for stable optimization
 - Compute cost scales with number of candidates explored
 - Single-task mode does not generalize; use mode 3 with `valset` for transfer
 - Currently powered by GEPA backend; API is backend-agnostic for future strategies
+
+## Official Documentation
+
+- **GEPA optimize_anything guide**: https://gepa-ai.github.io/gepa/blog/introducing-optimize-anything/
+- **GEPA quick start**: https://gepa-ai.github.io/gepa/guides/quickstart/
+- **GEPA GitHub**: https://github.com/gepa-ai/gepa

@@ -120,7 +120,8 @@ def search_wikipedia(query: str) -> str:
 def calculate(expression: str) -> float:
     """Evaluate a mathematical expression."""
     try:
-        return dspy.PythonInterpreter({}).execute(expression)
+        with dspy.PythonInterpreter() as interpreter:
+            return interpreter.execute(expression)
     except Exception as e:
         return f"Calculation error: {e}"
 
@@ -143,17 +144,20 @@ def contains_answer_metric(example, pred, trace=None) -> float:
     return float(example.answer.lower() in pred.answer.lower())
 
 
-def gepa_feedback_metric(example, pred, trace=None):
+def gepa_feedback_metric(example, pred, trace=None, pred_name=None, pred_trace=None):
     """Metric with feedback for GEPA optimizer."""
     if not hasattr(pred, 'answer') or not pred.answer:
-        return 0.0, "No answer generated"
+        return dspy.Prediction(score=0.0, feedback="No answer generated")
     
     correct = example.answer.lower() in pred.answer.lower()
     
     if correct:
-        return 1.0, "Correct answer provided"
+        return dspy.Prediction(score=1.0, feedback="Correct answer provided")
     else:
-        return 0.0, f"Expected '{example.answer}', got '{pred.answer}'"
+        return dspy.Prediction(
+            score=0.0,
+            feedback=f"Expected '{example.answer}', got '{pred.answer}'"
+        )
 
 
 # =============================================================================
@@ -200,11 +204,13 @@ def optimize_with_gepa(program, trainset):
 def optimize_anything_single_task(seed_artifact, evaluator_fn, background_info=None):
     """Optimize any text artifact using GEPA's optimize_anything (single-task)."""
     import gepa.optimize_anything as oa
+    from gepa.optimize_anything import EngineConfig, GEPAConfig
     
     result = oa.optimize_anything(
         seed_candidate=seed_artifact,
         evaluator=evaluator_fn,
         background=background_info,
+        config=GEPAConfig(engine=EngineConfig(max_metric_calls=100)),
     )
     
     return result.best_candidate
@@ -213,6 +219,7 @@ def optimize_anything_single_task(seed_artifact, evaluator_fn, background_info=N
 def optimize_anything_generalization(seed_artifact, evaluator_fn, trainset, valset, background_info=None):
     """Optimize a text artifact that generalizes to unseen examples."""
     import gepa.optimize_anything as oa
+    from gepa.optimize_anything import EngineConfig, GEPAConfig
     
     result = oa.optimize_anything(
         seed_candidate=seed_artifact,
@@ -220,6 +227,7 @@ def optimize_anything_generalization(seed_artifact, evaluator_fn, trainset, vals
         dataset=trainset,
         valset=valset,
         background=background_info,
+        config=GEPAConfig(engine=EngineConfig(max_metric_calls=100)),
     )
     
     return result.best_candidate
@@ -228,11 +236,13 @@ def optimize_anything_generalization(seed_artifact, evaluator_fn, trainset, vals
 def optimize_anything_seedless(evaluator_fn, objective, background_info=None):
     """Optimize from scratch — describe what you need, no seed required."""
     import gepa.optimize_anything as oa
+    from gepa.optimize_anything import EngineConfig, GEPAConfig
     
     result = oa.optimize_anything(
         evaluator=evaluator_fn,
         objective=objective,
         background=background_info,
+        config=GEPAConfig(engine=EngineConfig(max_metric_calls=100)),
     )
     
     return result.best_candidate
@@ -241,18 +251,15 @@ def optimize_anything_seedless(evaluator_fn, objective, background_info=None):
 def finetune_program(program, trainset, output_dir="./finetuned"):
     """Fine-tune model weights."""
     optimizer = dspy.BootstrapFinetune(
-        metric=exact_match_metric
-    )
-    
-    return optimizer.compile(
-        program,
-        trainset=trainset,
+        metric=exact_match_metric,
         train_kwargs={
             'learning_rate': 5e-5,
             'num_train_epochs': 3,
             'output_dir': output_dir
         }
     )
+    program.set_lm(dspy.settings.lm)
+    return optimizer.compile(program, trainset=trainset)
 
 
 # =============================================================================

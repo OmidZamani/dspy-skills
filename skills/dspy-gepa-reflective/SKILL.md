@@ -1,7 +1,7 @@
 ---
 name: dspy-gepa-reflective
 version: "1.0.0"
-dspy-compatibility: "3.1.2"
+dspy-compatibility: "3.2.1"
 description: This skill should be used when the user asks to "optimize an agent with GEPA", "use reflective optimization", "optimize ReAct agents", "provide feedback metrics", mentions "GEPA optimizer", "LLM reflection", "execution trajectories", "agentic systems optimization", or needs to optimize complex multi-step agents using textual feedback on execution traces.
 allowed-tools:
   - Read
@@ -34,7 +34,7 @@ Optimize complex agentic systems using LLM reflection on full execution traces w
 |-------|------|-------------|
 | `program` | `dspy.Module` | Agent or complex program |
 | `trainset` | `list[dspy.Example]` | Training examples |
-| `metric` | `callable` | Must return `(score, feedback)` tuple |
+| `metric` | `callable` | Accepts five arguments and returns `dspy.Prediction(score=..., feedback=...)` |
 | `reflection_lm` | `dspy.LM` | Strong LM for reflection (GPT-4) |
 | `auto` | `str` | "light", "medium", "heavy" |
 
@@ -51,8 +51,8 @@ Optimize complex agentic systems using LLM reflection on full execution traces w
 GEPA requires metrics that return *textual feedback*:
 
 ```python
-def gepa_metric(example, pred, trace=None):
-    """Must return (score, feedback) tuple."""
+def gepa_metric(example, pred, trace=None, pred_name=None, pred_trace=None):
+    """Return score and actionable feedback for GEPA reflection."""
     is_correct = example.answer.lower() in pred.answer.lower()
     
     if is_correct:
@@ -60,7 +60,7 @@ def gepa_metric(example, pred, trace=None):
     else:
         feedback = f"Incorrect. Expected '{example.answer}' but got '{pred.answer}'. The model may have misunderstood the question or retrieved irrelevant information."
     
-    return is_correct, feedback
+    return dspy.Prediction(score=float(is_correct), feedback=feedback)
 ```
 
 ### Phase 2: Setup Agent
@@ -126,18 +126,18 @@ class ResearchAgent(dspy.Module):
     def forward(self, question):
         return self.react(question=question)
 
-def detailed_feedback_metric(example, pred, trace=None):
+def detailed_feedback_metric(example, pred, trace=None, pred_name=None, pred_trace=None):
     """Rich feedback for GEPA reflection."""
     expected = example.answer.lower().strip()
     actual = pred.answer.lower().strip() if pred.answer else ""
     
     # Exact match
     if expected == actual:
-        return 1.0, "Perfect match. Answer is correct and concise."
+        return dspy.Prediction(score=1.0, feedback="Perfect match. Answer is correct and concise.")
     
     # Partial match
     if expected in actual or actual in expected:
-        return 0.7, f"Partial match. Expected '{example.answer}', got '{pred.answer}'. Answer contains correct info but may be verbose or incomplete."
+        return dspy.Prediction(score=0.7, feedback=f"Partial match. Expected '{example.answer}', got '{pred.answer}'. Answer contains correct info but may be verbose or incomplete.")
     
     # Check for key terms
     expected_terms = set(expected.split())
@@ -145,9 +145,9 @@ def detailed_feedback_metric(example, pred, trace=None):
     overlap = len(expected_terms & actual_terms) / max(len(expected_terms), 1)
     
     if overlap > 0.5:
-        return 0.5, f"Some overlap. Expected '{example.answer}', got '{pred.answer}'. Key terms present but answer structure differs."
+        return dspy.Prediction(score=0.5, feedback=f"Some overlap. Expected '{example.answer}', got '{pred.answer}'. Key terms present but answer structure differs.")
     
-    return 0.0, f"Incorrect. Expected '{example.answer}', got '{pred.answer}'. The agent may need better search queries or reasoning."
+    return dspy.Prediction(score=0.0, feedback=f"Incorrect. Expected '{example.answer}', got '{pred.answer}'. The agent may need better search queries or reasoning.")
 
 def optimize_research_agent(trainset, devset):
     """Full GEPA optimization pipeline."""
@@ -158,8 +158,7 @@ def optimize_research_agent(trainset, devset):
     
     # Convert metric for evaluation (just score)
     def eval_metric(example, pred, trace=None):
-        score, _ = detailed_feedback_metric(example, pred, trace)
-        return score
+        return detailed_feedback_metric(example, pred, trace).score
     
     evaluator = Evaluate(devset=devset, num_threads=8, metric=eval_metric)
     baseline = evaluator(agent)
@@ -169,8 +168,7 @@ def optimize_research_agent(trainset, devset):
     optimizer = dspy.GEPA(
         metric=detailed_feedback_metric,
         reflection_lm=dspy.LM("openai/gpt-4o"),
-        auto="medium",
-        enable_tool_optimization=True  # Also optimize tool descriptions
+        auto="medium"
     )
     
     compiled = optimizer.compile(agent, trainset=trainset)
@@ -181,18 +179,9 @@ def optimize_research_agent(trainset, devset):
     return compiled
 ```
 
-## Tool Optimization
+## Metric Contract
 
-GEPA can jointly optimize predictor instructions AND tool descriptions:
-
-```python
-optimizer = dspy.GEPA(
-    metric=gepa_metric,
-    reflection_lm=dspy.LM("openai/gpt-4o"),
-    auto="medium",
-    enable_tool_optimization=True  # Optimize tool docstrings too
-)
-```
+GEPA metrics must accept `(gold, pred, trace, pred_name, pred_trace)`. Return `dspy.Prediction(score=..., feedback=...)` when textual feedback is available. Do not pass `enable_tool_optimization`; it is not a DSPy 3.2.1 `GEPA` constructor argument.
 
 ## Best Practices
 
