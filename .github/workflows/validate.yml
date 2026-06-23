@@ -12,9 +12,24 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Validate plugin repository
         run: python3 scripts/validate_repo.py
       - name: Compile Python examples
         run: python3 -m compileall -q examples skills/dspy-haystack-integration/examples
+      - name: Strict skill structure check
+        run: python3 scripts/validate_repo.py --strict
+      - name: Run all skill examples
+        run: |
+          for f in skills/*/example.py; do
+            echo "Testing $f..."
+            python3 "$f" || exit 1
+          done

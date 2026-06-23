@@ -17,6 +17,7 @@ STABLE_DSPY_VERSION = "3.2.1"
 EXTERNAL_SKILLS = {"dspy-optimize-anything"}
 STABLE_GEPA_VERSION = "0.1.1"
 MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+STRICT_REQUIRED_FRONTMATTER = ("name", "version", "dspy-compatibility", "description")
 
 
 def error(message: str) -> None:
@@ -131,11 +132,46 @@ def validate_markdown_links() -> None:
                 error(f"{markdown_file.relative_to(ROOT)}: broken local link '{raw_target}'")
 
 
+def validate_strict_skill_structure() -> None:
+    skill_dirs = sorted(path for path in SKILLS_DIR.iterdir() if path.is_dir())
+    if not skill_dirs:
+        error("skills/: no skill directories found")
+        return
+
+    for skill_dir in skill_dirs:
+        skill_file = skill_dir / "SKILL.md"
+        example_file = skill_dir / "example.py"
+
+        if not skill_file.is_file():
+            error(f"{skill_file.relative_to(ROOT)}: missing file")
+            continue
+        if not example_file.is_file():
+            error(f"{example_file.relative_to(ROOT)}: missing file")
+
+        metadata = parse_frontmatter(skill_file)
+        required_fields = list(STRICT_REQUIRED_FRONTMATTER)
+        if skill_dir.name in EXTERNAL_SKILLS and "dspy-compatibility" not in metadata:
+            required_fields.remove("dspy-compatibility")
+            required_fields.append("gepa-compatibility")
+
+        for field in required_fields:
+            if not metadata.get(field):
+                error(f"{skill_file.relative_to(ROOT)}: missing required frontmatter field '{field}'")
+
+
 errors: list[str] = []
+strict_mode = "--strict" in sys.argv[1:]
+unknown_args = [arg for arg in sys.argv[1:] if arg != "--strict"]
+if unknown_args:
+    print(f"Unknown argument: {unknown_args[0]}")
+    sys.exit(2)
+
 validate_manifests()
 validate_skills()
 validate_catalog()
 validate_markdown_links()
+if strict_mode:
+    validate_strict_skill_structure()
 
 if errors:
     print("Validation failed:")
