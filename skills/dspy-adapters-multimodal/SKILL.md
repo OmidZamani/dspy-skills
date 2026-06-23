@@ -1,8 +1,10 @@
 ---
 name: dspy-adapters-multimodal
-version: "2.0.0"
+version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "choose a DSPy adapter", "use JSONAdapter", "use XMLAdapter", "enable native function calling", "send images, audio, or files to DSPy", mentions `dspy.ChatAdapter`, `dspy.JSONAdapter`, `dspy.XMLAdapter`, `dspy.Image`, `dspy.Audio`, `dspy.File`, structured outputs, or multimodal DSPy signatures.
+tags: ["multimodal"]
+requires-extras: []
+description: Use for DSPy adapter selection, JSONAdapter, XMLAdapter, ChatAdapter, native function calling, structured outputs, and multimodal inputs like dspy.Image or dspy.Audio.
 allowed-tools:
   - Read
   - Write

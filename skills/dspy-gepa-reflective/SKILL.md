@@ -2,7 +2,9 @@
 name: dspy-gepa-reflective
 version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "optimize an agent with GEPA", "use reflective optimization", "optimize ReAct agents", "provide feedback metrics", mentions "GEPA optimizer", "LLM reflection", "execution trajectories", "agentic systems optimization", or needs to optimize complex multi-step agents using textual feedback on execution traces.
+tags: ["optimizer", "agent"]
+requires-extras: []
+description: Use for GEPA reflective optimization, ReAct agent optimization, feedback metrics, LLM reflection, and execution trajectories.
 allowed-tools:
   - Read
   - Write

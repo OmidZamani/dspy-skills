@@ -1,8 +1,11 @@
 ---
 name: dspy-optimize-anything
-version: "1.1.0"
+version: "1.0.0"
+dspy-compatibility: "3.2.1"
 gepa-compatibility: "0.1.1"
-description: Universal text artifact optimizer using GEPA's optimize_anything API for code, prompts, agent architectures, configs, and more
+tags: ["optimizer"]
+requires-extras: ["gepa>=0.1.1,<0.2"]
+description: Use for GEPA optimize_anything on text artifacts such as code, prompts, agent architectures, configs, and non-DSPy optimization targets.
 allowed-tools:
   - Read
   - Write

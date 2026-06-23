@@ -2,7 +2,9 @@
 name: dspy-bootstrap-fewshot
 version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "bootstrap few-shot examples", "generate demonstrations", "use BootstrapFewShot", "optimize with limited data", "create training demos automatically", mentions "teacher model for few-shot", "10-50 training examples", or wants automatic demonstration generation for a DSPy program without extensive compute.
+tags: ["optimizer"]
+requires-extras: []
+description: Use for BootstrapFewShot, bootstrapped demonstrations, teacher-model demos, and low-data DSPy prompt optimization.
 allowed-tools:
   - Read
   - Write

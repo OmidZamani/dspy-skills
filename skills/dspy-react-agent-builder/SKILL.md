@@ -2,7 +2,9 @@
 name: dspy-react-agent-builder
 version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "create a ReAct agent", "build an agent with tools", "implement tool-calling agent", "use dspy.ReAct", mentions "agent with tools", "reasoning and acting", "multi-step agent", "agent optimization with GEPA", or needs to build production agents that use tools to solve complex tasks.
+tags: ["agent", "reasoning"]
+requires-extras: []
+description: Use for ReAct agents, tool-calling agents, dspy.ReAct, multi-step reasoning and acting, and GEPA agent optimization.
 allowed-tools:
   - Read
   - Write

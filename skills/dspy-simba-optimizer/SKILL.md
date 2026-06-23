@@ -2,7 +2,9 @@
 name: dspy-simba-optimizer
 version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "optimize with SIMBA", "use mini-batch introspective optimization", "generate self-reflective rules", mentions "SIMBA optimizer", "stochastic mini-batch ascent", "output variability", or needs an alternative to MIPROv2/GEPA that evolves rules and demonstrations from numeric metrics.
+tags: ["optimizer"]
+requires-extras: []
+description: Use for SIMBA optimization, mini-batch introspective optimization, self-reflective rules, stochastic ascent, and numeric-metric optimization.
 allowed-tools:
   - Read
   - Write

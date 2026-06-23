@@ -1,8 +1,10 @@
 ---
 name: dspy-production-deployment
-version: "2.0.0"
+version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "deploy DSPy", "save and load a DSPy program", "configure DSPy cache", "harden pickle cache", "track DSPy token usage", "run DSPy asynchronously", "stream DSPy output", mentions `configure_cache`, `restrict_pickle`, `track_usage`, `acall`, `asyncify`, `streamify`, `StreamListener`, MLflow deployment, or needs production runtime guidance for a DSPy application.
+tags: ["production"]
+requires-extras: []
+description: Use for deploying DSPy with save/load, configure_cache, restrict_pickle, track_usage, async execution, streaming, and production runtime controls.
 allowed-tools:
   - Read
   - Write

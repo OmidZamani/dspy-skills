@@ -2,7 +2,9 @@
 name: dspy-rag-pipeline
 version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "build a RAG pipeline", "create retrieval augmented generation", "use ColBERTv2 in DSPy", "set up a retriever in DSPy", mentions "RAG with DSPy", "context retrieval", "multi-hop RAG", or needs to build a DSPy system that retrieves external knowledge to answer questions with grounded, factual responses.
+tags: ["retrieval"]
+requires-extras: []
+description: Use for RAG pipelines, retrieval augmented generation, ColBERTv2, context retrieval, multi-hop RAG, and grounded DSPy answers.
 allowed-tools:
   - Read
   - Write

@@ -1,8 +1,10 @@
 ---
 name: dspy-embedding-retrieval
-version: "2.0.0"
+version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "build local DSPy retrieval", "use dspy.Embedder", "use dspy.Embeddings", "save an embeddings index", "add FAISS retrieval", mentions semantic search, hosted embeddings, local embedding models, `EmbeddingsWithScores`, or needs a DSPy retriever over an application-owned text corpus.
+tags: ["retrieval"]
+requires-extras: ["faiss-cpu"]
+description: Use for DSPy retrieval with dspy.Embedder, dspy.Embeddings, FAISS indexes, semantic search, and local or hosted embedding models.
 allowed-tools:
   - Read
   - Write

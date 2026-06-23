@@ -1,8 +1,10 @@
 ---
 name: dspy-better-together
-version: "2.0.0"
+version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "use BetterTogether", "combine prompt optimization and fine-tuning", "sequence DSPy optimizers", "run prompt then weight optimization", mentions `dspy.BetterTogether`, strategy strings such as "p -> w -> p", or needs to compose multiple DSPy teleprompters into an evaluated optimization sequence.
+tags: ["optimizer"]
+requires-extras: []
+description: Use for BetterTogether, prompt plus weight optimization, fine-tuning sequences, and strategy chains like p -> w -> p.
 allowed-tools:
   - Read
   - Write

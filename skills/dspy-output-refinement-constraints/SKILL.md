@@ -2,7 +2,9 @@
 name: dspy-output-refinement-constraints
 version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "refine DSPy outputs", "enforce constraints", "use dspy.Refine", "select best output", "use dspy.BestOfN", mentions "output validation", "constraint checking", "multi-attempt generation", "reward function", or needs to improve output quality through iterative refinement or best-of-N selection with custom constraints.
+tags: ["evaluation", "reasoning"]
+requires-extras: []
+description: Use for dspy.Refine, dspy.BestOfN, output constraints, validation, reward functions, and iterative output refinement.
 allowed-tools:
   - Read
   - Write

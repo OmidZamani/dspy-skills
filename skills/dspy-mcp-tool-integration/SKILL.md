@@ -1,8 +1,10 @@
 ---
 name: dspy-mcp-tool-integration
-version: "2.0.0"
+version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "use MCP tools with DSPy", "connect an MCP server to ReAct", "convert MCP tools to DSPy tools", mentions Model Context Protocol, `dspy.Tool.from_mcp_tool`, streamable HTTP MCP transport, stdio MCP servers, or needs to expose MCP-compatible tools to a DSPy agent.
+tags: ["agent", "production"]
+requires-extras: ["dspy[mcp]"]
+description: Use for MCP tools with DSPy, Model Context Protocol servers, dspy.Tool.from_mcp_tool, and ReAct agents over MCP-compatible tools.
 allowed-tools:
   - Read
   - Write

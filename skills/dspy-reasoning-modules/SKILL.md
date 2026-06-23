@@ -1,8 +1,10 @@
 ---
 name: dspy-reasoning-modules
-version: "2.0.0"
+version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "use DSPy RLM", "process a very long context", "use ProgramOfThought", "use CodeAct", "run DSPy modules in parallel", mentions Recursive Language Models, sandboxed Python execution, Deno, `dspy.RLM`, `dspy.ProgramOfThought`, `dspy.CodeAct`, or `dspy.Parallel`, or needs to choose a DSPy reasoning module beyond Predict, ChainOfThought, and ReAct.
+tags: ["reasoning"]
+requires-extras: []
+description: Use for DSPy reasoning modules including RLM, ProgramOfThought, CodeAct, Parallel, sandboxed execution, and long-context workflows.
 allowed-tools:
   - Read
   - Write

@@ -1,8 +1,10 @@
 ---
 name: dspy-optimizer-selection
-version: "2.0.0"
+version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "choose a DSPy optimizer", "compare DSPy optimizers", "which teleprompter should I use", "optimize prompts or weights", mentions LabeledFewShot, BootstrapFewShotWithRandomSearch, KNNFewShot, COPRO, MIPROv2, SIMBA, GEPA, BootstrapFinetune, Ensemble, or BetterTogether, or needs a cost-aware DSPy optimization plan.
+tags: ["optimizer"]
+requires-extras: []
+description: Use to choose or compare DSPy optimizers including LabeledFewShot, BootstrapFewShot, MIPROv2, SIMBA, GEPA, BootstrapFinetune, Ensemble, and BetterTogether.
 allowed-tools:
   - Read
   - Write

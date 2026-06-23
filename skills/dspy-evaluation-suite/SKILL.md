@@ -2,7 +2,9 @@
 name: dspy-evaluation-suite
 version: "1.0.0"
 dspy-compatibility: "3.2.1"
-description: This skill should be used when the user asks to "evaluate a DSPy program", "test my DSPy module", "measure performance", "create evaluation metrics", "use answer_exact_match or SemanticF1", mentions "Evaluate class", "comparing programs", "establishing baselines", or needs to systematically test and measure DSPy program quality with custom or built-in metrics.
+tags: ["evaluation"]
+requires-extras: []
+description: Use for evaluating DSPy programs with Evaluate, answer_exact_match, SemanticF1, custom metrics, baselines, and program comparisons.
 allowed-tools:
   - Read
   - Write
